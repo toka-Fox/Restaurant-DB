@@ -19,4 +19,4 @@
 
  - Run 'main.py' and connect to the server
    - 'python app/main.py'
-   - Go to '[DB_HOST]:[DB_PORT]' in your browser
+   - Go to '127.0.0.1:5000' in your browser

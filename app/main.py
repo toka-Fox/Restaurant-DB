@@ -22,7 +22,7 @@ def get_db_connection():
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PSWD"),
         database=os.getenv("DB_NAME"),
-        port=int(os.getenv("DB_PORT", 3306))
+        port=os.getenv("DB_PORT")
     )
 
 @app.route("/")
@@ -562,4 +562,4 @@ def add_order():
     return redirect("/")
 
 if __name__ == "__main__":
-    app.run(os.getenv("DB_HOST"), os.getenv("DB_PORT"))
+    app.run(debug=True)
