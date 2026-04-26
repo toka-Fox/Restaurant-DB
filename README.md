@@ -13,4 +13,10 @@
    - In .env fill the fields with the necessary credentials
 
 
- - Then finally run the 'main.py' script either in the terminal or in any IDE that works.
+ - Run 'setup.py' to create the database
+   - 'python app/database/setup.py'
+
+
+ - Run 'main.py' and connect to the server
+   - 'python app/main.py'
+   - Go to '[DB_HOST]:[DB_PORT]' in your browser

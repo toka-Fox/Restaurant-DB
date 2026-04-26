@@ -19,16 +19,12 @@ def init_restaurantdb():
         cursor.execute(f"USE {os.getenv("DB_NAME")}")
 
         tables = {
-            "Staff": "CREATE TABLE IF NOT EXISTS Staff (Emp_ID INT PRIMARY KEY AUTO_INCREMENT, Emp_fName VARCHAR(15), Emp_lName VARCHAR(20), Emp_Role VARCHAR(20), Emp_Phone INT, Emp_Email VARCHAR(25), Emp_Address VARCHAR(40), Emp_HourlyRate DECIMAL(5,2), Emp_IsActive BOOL DEFAULT 1)",
-            "Customer": "CREATE TABLE IF NOT EXISTS Customer (Ctmr_ID INT PRIMARY KEY AUTO_INCREMENT, Ctmr_fName VARCHAR(15), Ctmr_lName VARCHAR(20), Ctmr_Phone INT, Ctmr_Email VARCHAR(25))",
-            "Tables": "CREATE TABLE IF NOT EXISTS Tables (Table_ID INT PRIMARY KEY AUTO_INCREMENT, Table_Capacity INT, Table_Status VARCHAR(10) DEFAULT 'EMPTY')",
-            "Assignment": "CREATE TABLE IF NOT EXISTS Assignment (Assignment_ID INT PRIMARY KEY AUTO_INCREMENT, Table_ID INT, Emp_ID INT, FOREIGN KEY (Table_ID) REFERENCES Tables(Table_ID), FOREIGN KEY (Emp_ID) REFERENCES Staff(Emp_ID))",
-            "Reservation": "CREATE TABLE IF NOT EXISTS Reservation (Resv_ID INT PRIMARY KEY AUTO_INCREMENT, Ctmr_ID INT, Table_ID INT, Resv_DateTime DATETIME, Resv_Size INT, Resv_Status VARCHAR(10) DEFAULT 'Active', FOREIGN KEY (Ctmr_ID) REFERENCES Customer(Ctmr_ID), FOREIGN KEY (Table_ID) REFERENCES Tables(Table_ID))",
-            "Orders": "CREATE TABLE IF NOT EXISTS Orders (Order_ID INT PRIMARY KEY AUTO_INCREMENT, Ctmr_ID INT, Table_ID INT, Emp_ID INT, Order_Type VARCHAR(10) DEFAULT 'HERE', Order_Status VARCHAR(10) DEFAULT 'Pending', FOREIGN KEY (Ctmr_ID) REFERENCES Customer(Ctmr_ID), FOREIGN KEY (Table_ID) REFERENCES Tables(Table_ID), FOREIGN KEY (Emp_ID) REFERENCES Staff(Emp_ID))",
-            "Stock": "CREATE TABLE IF NOT EXISTS Ingredient (Stock_ID INT PRIMARY KEY AUTO_INCREMENT, Stock_Name VARCHAR(20), Stock_Amount INT)",
-            "Category": "CREATE TABLE IF NOT EXISTS Category (Cat_ID INT PRIMARY KEY AUTO_INCREMENT, Cat_Name VARCHAR(20))",
-            "Menu": "CREATE TABLE IF NOT EXISTS Menu (Menu_ItemID INT PRIMARY KEY AUTO_INCREMENT, Menu_ItemName VARCHAR(20), Cat_ID INT, Menu_ItemDesc VARCHAR(100), Menu_ItemPrice DECIMAL(5,2), FOREIGN KEY (Cat_ID) REFERENCES Category(Cat_ID))",
-            "Payment": "CREATE TABLE IF NOT EXISTS Payment (Pay_ID INT PRIMARY KEY AUTO_INCREMENT, Order_ID INT, Pay_Due DECIMAL(7,2), Pay_Tip DECIMAL(5,2) DEFAULT (Pay_Due * 0.20), Pay_Method VARCHAR(10), FOREIGN KEY (Order_ID) REFERENCES Orders(Order_ID))"
+            "Staff": "CREATE TABLE IF NOT EXISTS Staff (staff_id INT AUTO_INCREMENT PRIMARY KEY, staff_name VARCHAR(100), staff_address VARCHAR(150), staff_phone VARCHAR(20), staff_email VARCHAR(100), staff_pay_rate DECIMAL(10,2), staff_role VARCHAR(50))",
+            "Ingredient": "CREATE TABLE IF NOT EXISTS Ingredients (ingredient_id INT AUTO_INCREMENT PRIMARY KEY, ingredient_name VARCHAR(60), ingredient_unit VARCHAR(20), ingredient_current_qty DECIMAL(10,2), ingredient_reorder_level DECIMAL(10,2))",
+            "Menu_Item": "CREATE TABLE IF NOT EXISTS Menu_Item (menu_item_id INT AUTO_INCREMENT PRIMARY KEY, menu_item_name VARCHAR(80), menu_item_price DECIMAL(8,2), menu_item_available BOOLEAN)",
+            "Customer_Order": "CREATE TABLE IF NOT EXISTS Customer_Order (order_id INT AUTO_INCREMENT PRIMARY KEY, customer_name VARCHAR(100), customer_phone VARCHAR(20), customer_email VARCHAR(100), order_number VARCHAR(30), order_details TEXT, order_status VARCHAR(30))",
+            "Reservation": "CREATE TABLE IF NOT EXISTS Reservation (reservation_id INT AUTO_INCREMENT PRIMARY KEY, customer_name VARCHAR(100), customer_phone VARCHAR(20), customer_email VARCHAR(100), reservation_time VARCHAR(50), party_size INT, reservation_status VARCHAR(30))",
+            "Payment": "CREATE TABLE IF NOT EXISTS Payment (payment_id INT AUTO_INCREMENT PRIMARY KEY, payment_type VARCHAR(30), payment_name VARCHAR(100), payment_amount DECIMAL(10,2), payment_date VARCHAR(30))"
         }
 
         for name, dbc in tables.items():

@@ -1,3 +1,5 @@
+from os import getenv
+
 from flask import Flask, render_template, request, redirect, flash
 import random
 import mysql.connector
@@ -560,4 +562,4 @@ def add_order():
     return redirect("/")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(os.getenv("DB_HOST"), os.getenv("DB_PORT"))
