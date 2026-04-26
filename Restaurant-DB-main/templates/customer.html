@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Page</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h1>🍽️ Welcome to Our Restaurant</h1>
+<p class="subtitle">Browse menu, make reservations, or place an order</p>
+
+<section>
+    <h2>Menu</h2>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+        </tr>
+
+        {% for item in menu_list %}
+        <tr>
+            <td>{{ item.menu_item_name }}</td>
+            <td>${{ item.menu_item_price }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</section>
+
+<hr>
+
+<section>
+    <h2>Make a Reservation</h2>
+
+    <form action="/add_reservation" method="POST">
+        <input type="text" name="customer_name" placeholder="Your Name" required>
+        <input type="text" name="customer_phone" placeholder="Phone" required>
+        <input type="email" name="customer_email" placeholder="Email">
+        <input type="text" name="reservation_time" placeholder="Time (ex: 7PM)" required>
+        <input type="number" name="party_size" placeholder="Party Size" required>
+
+        <input type="hidden" name="reservation_status" value="Booked">
+
+        <button type="submit">Book Reservation</button>
+    </form>
+</section>
+
+<hr>
+
+<section>
+    <h2>Place an Order</h2>
+
+    <form action="/add_order" method="POST">
+        <input type="text" name="customer_name" placeholder="Your Name" required>
+        <input type="text" name="customer_phone" placeholder="Phone" required>
+        <input type="email" name="customer_email" placeholder="Email">
+
+        <input type="text" name="order_number" placeholder="Order Number (any number)" required>
+        <input type="text" name="order_details" placeholder="What would you like?" required>
+
+        <input type="hidden" name="order_status" value="Open">
+
+        <button type="submit">Place Order</button>
+    </form>
+</section>
+
+</body>
+</html>

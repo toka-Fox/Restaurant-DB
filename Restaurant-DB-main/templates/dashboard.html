@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Restaurant Database Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>🍽️ ServeSmart Restaurant Dashboard</h1>
+    <p style="text-align:center;">
+    <a href="/customer">Go to Customer View</a>
+</p>
+<p class="subtitle">Manage staff, reservations, customer orders, menu items, inventory, and payments.</p>
+    <section>
+        <h2>Staff List</h2>
+
+        <form action="/add_staff" method="POST">
+            <input type="text" name="staff_name" placeholder="Name" required>
+            <input type="text" name="staff_address" placeholder="Address" required>
+            <input type="text" name="staff_phone" placeholder="Phone" required>
+            <input type="email" name="staff_email" placeholder="Email" required>
+            <input type="number" step="0.01" name="staff_pay_rate" placeholder="Pay Rate" required>
+            <input type="text" name="staff_role" placeholder="Role" required>
+            <button type="submit">Add Staff</button>
+        </form>
+
+        <table border="1">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Pay Rate</th>
+                <th>Role</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+
+            {% for staff in staff_list %}
+            <tr>
+                <form action="/update_staff/{{ staff.staff_id }}" method="POST">
+                    <td>{{ staff.staff_id }}</td>
+                    <td><input type="text" name="staff_name" value="{{ staff.staff_name }}"></td>
+                    <td><input type="text" name="staff_address" value="{{ staff.staff_address }}"></td>
+                    <td><input type="text" name="staff_phone" value="{{ staff.staff_phone }}"></td>
+                    <td><input type="email" name="staff_email" value="{{ staff.staff_email }}"></td>
+                    <td><input type="number" step="0.01" name="staff_pay_rate" value="{{ staff.staff_pay_rate }}"></td>
+                    <td><input type="text" name="staff_role" value="{{ staff.staff_role }}"></td>
+                    <td><button type="submit">Update</button></td>
+                </form>
+
+                <td>
+                    <form action="/delete_staff/{{ staff.staff_id }}" method="POST">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </section>
+</body>
+</html>
+<hr>
+
+<section>
+    <h2>Reservations</h2>
+
+    <form action="/add_reservation" method="POST">
+        <input type="text" name="customer_name" placeholder="Customer Name" required>
+        <input type="text" name="customer_phone" placeholder="Phone" required>
+        <input type="email" name="customer_email" placeholder="Email">
+        <input type="text" name="reservation_time" placeholder="Reservation Time" required>
+        <input type="number" name="party_size" placeholder="Party Size" required>
+
+        <select name="reservation_status">
+            <option value="Booked">Booked</option>
+            <option value="Seated">Seated</option>
+            <option value="Cancelled">Cancelled</option>
+        </select>
+
+        <button type="submit">Add Reservation</button>
+    </form>
+
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Time</th>
+            <th>Party Size</th>
+            <th>Status</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+
+        {% for reservation in reservation_list %}
+        <tr>
+            <form action="/update_reservation/{{ reservation.reservation_id }}" method="POST">
+                <td>{{ reservation.reservation_id }}</td>
+                <td><input type="text" name="customer_name" value="{{ reservation.customer_name }}"></td>
+                <td><input type="text" name="customer_phone" value="{{ reservation.customer_phone }}"></td>
+                <td><input type="email" name="customer_email" value="{{ reservation.customer_email }}"></td>
+                <td><input type="text" name="reservation_time" value="{{ reservation.reservation_time }}"></td>
+                <td><input type="number" name="party_size" value="{{ reservation.party_size }}"></td>
+                <td>
+                    <select name="reservation_status">
+                        <option value="Booked" {% if reservation.reservation_status == "Booked" %}selected{% endif %}>Booked</option>
+                        <option value="Seated" {% if reservation.reservation_status == "Seated" %}selected{% endif %}>Seated</option>
+                        <option value="Cancelled" {% if reservation.reservation_status == "Cancelled" %}selected{% endif %}>Cancelled</option>
+                    </select>
+                </td>
+                <td><button type="submit">Update</button></td>
+            </form>
+
+            <td>
+                <form action="/delete_reservation/{{ reservation.reservation_id }}" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</section>
+<hr>
+
+<section>
+    <h2>Customer Orders</h2>
+
+    <form action="/add_order" method="POST">
+        <input type="text" name="customer_name" placeholder="Customer Name" required>
+        <input type="text" name="customer_phone" placeholder="Phone" required>
+        <input type="email" name="customer_email" placeholder="Email">
+        <input type="text" name="order_number" placeholder="Order Number" required>
+        <input type="text" name="order_details" placeholder="Order Details" required>
+
+        <select name="order_status">
+            <option value="Open">Open</option>
+            <option value="Preparing">Preparing</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+        </select>
+
+        <button type="submit">Add Order</button>
+    </form>
+
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Order #</th>
+            <th>Order Details</th>
+            <th>Status</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+
+        {% for order in order_list %}
+        <tr>
+            <form action="/update_order/{{ order.order_id }}" method="POST">
+                <td>{{ order.order_id }}</td>
+                <td><input type="text" name="customer_name" value="{{ order.customer_name }}"></td>
+                <td><input type="text" name="customer_phone" value="{{ order.customer_phone }}"></td>
+                <td><input type="email" name="customer_email" value="{{ order.customer_email }}"></td>
+                <td><input type="text" name="order_number" value="{{ order.order_number }}"></td>
+                <td><input type="text" name="order_details" value="{{ order.order_details }}"></td>
+                <td>
+                    <select name="order_status">
+                        <option value="Open" {% if order.order_status == "Open" %}selected{% endif %}>Open</option>
+                        <option value="Preparing" {% if order.order_status == "Preparing" %}selected{% endif %}>Preparing</option>
+                        <option value="Completed" {% if order.order_status == "Completed" %}selected{% endif %}>Completed</option>
+                        <option value="Cancelled" {% if order.order_status == "Cancelled" %}selected{% endif %}>Cancelled</option>
+                    </select>
+                </td>
+                <td><button type="submit">Update</button></td>
+            </form>
+
+            <td>
+                <form action="/delete_order/{{ order.order_id }}" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</section>
+<hr>
+
+<section>
+    <h2>Menu Items</h2>
+
+    <form action="/add_menu_item" method="POST">
+        <input type="text" name="menu_item_name" placeholder="Menu Item Name" required>
+        <input type="number" step="0.01" name="menu_item_price" placeholder="Price" required>
+
+        <select name="menu_item_available">
+            <option value="Available">Available</option>
+            <option value="Unavailable">Unavailable</option>
+        </select>
+
+        <button type="submit">Add Menu Item</button>
+    </form>
+
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Item Name</th>
+            <th>Price</th>
+            <th>Available</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+
+        {% for item in menu_list %}
+        <tr>
+            <form action="/update_menu_item/{{ item.menu_item_id }}" method="POST">
+                <td>{{ item.menu_item_id }}</td>
+                <td><input type="text" name="menu_item_name" value="{{ item.menu_item_name }}"></td>
+                <td><input type="number" step="0.01" name="menu_item_price" value="{{ item.menu_item_price }}"></td>
+                <td>
+                    <select name="menu_item_available">
+                        <option value="Available" {% if item.menu_item_available == 1 %}selected{% endif %}>Available</option>
+                        <option value="Unavailable" {% if item.menu_item_available == 0 %}selected{% endif %}>Unavailable</option>
+                    </select>
+                </td>
+                <td><button type="submit">Update</button></td>
+            </form>
+
+            <td>
+                <form action="/delete_menu_item/{{ item.menu_item_id }}" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</section>
+<hr>
+
+<section>
+    <h2>Inventory / Ingredients</h2>
+
+    <form action="/add_ingredient" method="POST">
+        <input type="text" name="ingredient_name" placeholder="Ingredient Name" required>
+        <input type="text" name="ingredient_unit" placeholder="Unit / Type (lbs, oz, count)" required>
+        <input type="number" step="0.01" name="ingredient_current_qty" placeholder="Current Quantity" required>
+        <input type="number" step="0.01" name="ingredient_reorder_level" placeholder="Reorder Level" required>
+
+        <button type="submit">Add Inventory Item</button>
+    </form>
+
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Ingredient Name</th>
+            <th>Unit / Type</th>
+            <th>Current Quantity</th>
+            <th>Reorder Level</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+
+        {% for ingredient in ingredient_list %}
+        <tr>
+            <form action="/update_ingredient/{{ ingredient.ingredient_id }}" method="POST">
+                <td>{{ ingredient.ingredient_id }}</td>
+                <td><input type="text" name="ingredient_name" value="{{ ingredient.ingredient_name }}"></td>
+                <td><input type="text" name="ingredient_unit" value="{{ ingredient.ingredient_unit }}"></td>
+                <td><input type="number" step="0.01" name="ingredient_current_qty" value="{{ ingredient.ingredient_current_qty }}"></td>
+                <td><input type="number" step="0.01" name="ingredient_reorder_level" value="{{ ingredient.ingredient_reorder_level }}"></td>
+                <td><button type="submit">Update</button></td>
+            </form>
+
+            <td>
+                <form action="/delete_ingredient/{{ ingredient.ingredient_id }}" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</section>
+
+<hr>
+
+<section>
+    <h2>Payments</h2>
+
+    <form action="/add_payment" method="POST">
+        <select name="payment_type">
+            <option value="Customer">Customer Payment</option>
+            <option value="Distributor">Distributor Payment</option>
+            <option value="Employee">Employee Payment</option>
+        </select>
+
+        <input type="text" name="payment_name" placeholder="Paid By / Paid To" required>
+        <input type="number" step="0.01" name="payment_amount" placeholder="Amount" required>
+        <input type="date" name="payment_date" required>
+
+        <button type="submit">Add Payment</button>
+    </form>
+
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Payment Type</th>
+            <th>Paid By / Paid To</th>
+            <th>Amount</th>
+            <th>Date Paid</th>
+        </tr>
+
+        {% for payment in payment_list %}
+        <tr>
+            <td>{{ payment.payment_id }}</td>
+            <td>{{ payment.payment_type }}</td>
+            <td>{{ payment.payment_name }}</td>
+            <td>{{ payment.payment_amount }}</td>
+            <td>{{ payment.payment_date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</section>
