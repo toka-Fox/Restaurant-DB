@@ -4,7 +4,7 @@
 
  - Run these commands in the cloned project folder:
    - 'python3 -m venv venv' (Create virtual environment)
-   - 'venv/Scripts/activate' (Activate virtual environment)
+   - '.\venv\Scripts\activate' (Activate virtual environment)
    - 'pip install --upgrade pip' (Update pip)
    - 'pip install -r requirements.txt' (Install required python packages)
 
