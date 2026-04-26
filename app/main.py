@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash
+import random
 import mysql.connector
 from dotenv import load_dotenv
 import os
@@ -504,6 +505,59 @@ def customer_order():
 
     return render_template("customer_order.html", menu_list=menu_list)
 
+@app.route("/add_reservation", methods=["POST"])
+def add_reservation():
+    customer_name = request.form["customer_name"]
+    customer_phone = request.form["customer_phone"]
+    customer_email = request.form["customer_email"]
+    reservation_time = request.form["reservation_time"]
+    party_size = request.form["party_size"]
+    reservation_status = request.form["reservation_status"]
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sql = """
+        INSERT INTO reservation
+        (customer_name, customer_phone, customer_email, reservation_time, party_size, reservation_status)
+        VALUES (%s, %s, %s, %s, %s, %s)
+    """
+    values = (customer_name, customer_phone, customer_email, reservation_time, party_size, reservation_status)
+
+    cursor.execute(sql, values)
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return redirect("/")
+
+@app.route("/add_order", methods=["POST"])
+def add_order():
+    customer_name = request.form["customer_name"]
+    customer_phone = request.form["customer_phone"]
+    customer_email = request.form["customer_email"]
+    order_number = request.form["order_number"]
+    order_details = request.form["order_details"]
+    order_status = request.form["order_status"]
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sql = """
+        INSERT INTO customer_order
+        (customer_name, customer_phone, customer_email, order_number, order_details, order_status)
+        VALUES (%s, %s, %s, %s, %s, %s)
+    """
+    values = (customer_name, customer_phone, customer_email, order_number, order_details, order_status)
+
+    cursor.execute(sql, values)
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return redirect("/")
 
 if __name__ == "__main__":
     app.run(debug=True)
